@@ -653,7 +653,7 @@
                             <action selector="performLocalSearch:" target="494" id="jCF-l8-8fz"/>
                         </connections>
                     </searchField>
-                    <mapView misplaced="YES" mapType="standard" id="8go-DC-rGb">
+                    <mapView misplaced="YES" mapType="standard" id="8go-DC-rGb" customClass="MyMapView">
                         <rect key="frame" x="20" y="20" width="531" height="274"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </mapView>
