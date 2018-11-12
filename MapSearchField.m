@@ -1,8 +1,10 @@
 #import "MapSearchField.h"
 #import <MapKit/MapKit.h>
 #import "SuggestionsWindowController.h"
+#import "MapSearchFieldCell.h"
+#import "MapDelayedSpinner.h"
 
-@interface MapSearchField() <MKLocalSearchCompleterDelegate, NSSearchFieldDelegate> {
+@interface MapSearchField() <MKLocalSearchCompleterDelegate, NSSearchFieldDelegate, NSTextFieldDelegate> {
 @private
     SuggestionsWindowController *_suggestionsController;
 }
@@ -16,6 +18,21 @@
 
 
 @implementation MapSearchField
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    MapDelayedSpinner *spinner = [[MapDelayedSpinner alloc] initWithFrame:NSMakeRect(CGRectGetMaxX([self bounds]) - 22,
+                                                                                     CGRectGetMinY([self bounds]) + 1,
+                                                                                     22, 22)];
+    [self addSubview:spinner];
+    [[self cell] setSpinner:spinner];
+}
+
+//+ (Class)cellClass
+//{
+//    return [MapSearchField class];
+//}
 
 - (instancetype)initWithFrame:(NSRect)frameRect
 {
@@ -44,6 +61,14 @@
     [self setDelegate:self];
 }
 
+- (void)setFrame:(NSRect)frame
+{
+    [super setFrame:frame];
+    if ([[self cell] respondsToSelector:@selector(updateSpinnerFrame)]) {
+        [(MapSearchFieldCell *)[self cell] updateSpinnerFrame];
+    }
+}
+
 #pragma mark -
 #pragma mark Suggestions
 
@@ -60,13 +85,12 @@
  */
 - (IBAction)updateWithSelectedSuggestion:(id)sender {
     NSDictionary *entry = [sender selectedSuggestion];
-    if (entry) {
-        NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
-        if (fieldEditor) {
-            [self updateFieldEditor:fieldEditor withSuggestion:[entry objectForKey:kSuggestionLabel]];
-            _suggestedCompletion = [entry objectForKey:kSuggestionCompletion];
-        }
+    _suggestedCompletion = [entry objectForKey:kSuggestionCompletion];
+    NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
+    if (fieldEditor) {
+        [self updateFieldEditor:fieldEditor withSuggestion:[entry objectForKey:kSuggestionLabel]];
     }
+    
 }
 
 /* Recursively search through all the image files starting at the _baseURL for image file names that begin with the supplied string. It returns an array of NSDictionaries. Each dictionary contains a label, detailed label and an url with keys that match the binding used by each custom suggestion view defined in suggestionprototype.xib.
@@ -97,9 +121,13 @@
 /* Update the field editor with a suggested string. The additional suggested characters are auto selected.
  */
 - (void)updateFieldEditor:(NSText *)fieldEditor withSuggestion:(NSString *)suggestion {
-    NSRange selection = NSMakeRange([fieldEditor selectedRange].location, [suggestion length]);
-    [fieldEditor setString:suggestion];
-    [fieldEditor setSelectedRange:selection];
+    if (suggestion == nil){
+        [fieldEditor delete:self];
+    } else {
+        NSRange selection = NSMakeRange([fieldEditor selectedRange].location, [suggestion length]);
+        [fieldEditor setString:suggestion];
+        [fieldEditor setSelectedRange:selection];
+    }
 }
 
 /* Determines the current list of suggestions, display the suggestions and update the field editor.
@@ -111,10 +139,9 @@
         NSRange selection = [fieldEditor selectedRange];
         NSString *text = [[fieldEditor string] substringToIndex:selection.location];
         
-        NSString *searchString = text;
         if ([text length]) {
             [[self searchCompleter] cancel];
-            [[self searchCompleter] setQueryFragment:searchString];
+            [[self searchCompleter] setQueryFragment:text];
         }
     }
 }
@@ -135,6 +162,7 @@
 /* The field editor's text may have changed for a number of reasons. Generally, we should update the suggestions window with the new suggestions. However, in some cases (the user deletes characters) we cancel the suggestions window.
  */
 - (void)controlTextDidChange:(NSNotification *)notification {
+    _suggestedCompletion = nil;
     if(!self.skipNextSuggestion) {
         [self updateSuggestionsFromControl:notification.object];
     } else {
@@ -151,6 +179,7 @@
 
 /* The field editor has ended editing the text. This is not the same as the action from the NSTextField. In the MainMenu.xib, the search text field is setup to only send its action on return / enter. If the user tabs to or clicks on another control, text editing will end and this method is called. We don't consider this committal of the action. Instead, we realy on the text field's action (see -performLocalSearch: above) to commit the suggestion. However, since the action may not occur, we need to cancel the suggestions window here.
  */
+
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
     /* If the suggestionController is already in a cancelled state, this call does nothing and is therefore always safe to call.
      */
@@ -194,15 +223,26 @@
     if (commandSelector == @selector(cancelOperation:)) {
         if ([_suggestionsController.window isVisible]) {
             [_suggestionsController cancelSuggestions];
+            [[control currentEditor] delete:self];
+            [[self searchCompleter] cancel];
+            _suggestedCompletion = nil;
+            _searchAutocompletions = nil;
+            return YES;
         }
-        [[self searchCompleter] cancel];
-        _suggestedCompletion = nil;
-        _searchAutocompletions = nil;
         return NO;
+
+        
     }
     
     // This is a command that we don't specifically handle, let the field editor do the appropriate thing.
     return NO;
+}
+
+- (void)cancelOperation:(nullable id)sender
+{
+    if ([[self stringValue] length] == 0) {
+        [[self window] makeFirstResponder:[self window]];
+    }
 }
 
 #pragma mark -
@@ -242,6 +282,5 @@
     _suggestedCompletion = nil;
     [_suggestionsController cancelSuggestions];
 }
-
 
 @end

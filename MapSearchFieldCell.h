@@ -46,13 +46,19 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 */
 
 #import <Cocoa/Cocoa.h>
+#import "MapDelayedSpinner.h"
 
-
-@interface SuggestibleTextFieldCell : NSSearchFieldCell {
+@interface MapSearchFieldCell : NSSearchFieldCell <MapDelayedSpinnerDelegate> {
     
 }
 
-@property (assign) NSWindow *suggestionsWindow;
+@property (nonatomic, assign) NSWindow *suggestionsWindow;
+@property (nonatomic) MapDelayedSpinner *spinner;
+
+- (void)spinnerStateChanged;
+- (void)updateSpinnerFrame;
+- (void)startSpinner;
+- (void)stopSpinner;
 
 @end
 

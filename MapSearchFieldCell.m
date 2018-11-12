@@ -45,9 +45,9 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 */
 
-#import "SuggestibleTextFieldCell.h"
+#import "MapSearchFieldCell.h"
 
-@implementation SuggestibleTextFieldCell
+@implementation MapSearchFieldCell
 
 @synthesize suggestionsWindow = _suggestionsWindow;
 
@@ -58,9 +58,9 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     if ([self backgroundStyle] == NSBackgroundStyleDark) {
         [self setTextColor:[NSColor whiteColor]];
     }
-    
+
     [super drawWithFrame:cellFrame inView:controlView];
-    
+
     [self setTextColor:textColor];
 }
 
@@ -85,5 +85,65 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     
     return attributeValue;
 }
+
+- (NSRect)cancelButtonRectForBounds:(NSRect)rect
+{
+    rect = [super cancelButtonRectForBounds:rect];
+    if ([[self spinner] spins]) {
+        if ([[self spinner] isHidden]) {
+            rect = NSZeroRect;
+        }
+    }
+    return rect;
+}
+
+- (void)setSpinner:(MapDelayedSpinner *)spinner
+{
+    if (_spinner != spinner) {
+        [spinner setDelegate:self];
+        _spinner = spinner;
+        [_spinner setControlSize:NSControlSizeSmall];
+    }
+}
+
+- (void)startSpinner
+{
+    [self updateSpinnerFrame];
+    [[self spinner] startDelayedAnimation:nil];
+}
+
+- (void)stopSpinner
+{
+    [[self spinner] stopDelayedAnimation:nil];
+}
+
+- (void)updateSpinnerFrame
+{
+    NSRect bounds = [[self controlView] bounds];
+    NSRect cancelRect = [super cancelButtonRectForBounds:bounds];
+    NSRect newSpinnerRect = NSInsetRect(cancelRect, 2, 2);
+    [[self spinner] setFrame:newSpinnerRect];
+}
+
+- (void)spinnerStateChanged
+{
+    [[self controlView] setNeedsDisplay:YES];
+}
+
+//- (instancetype)initWithCoder:(NSCoder *)coder
+//{
+//    self = [super initWithCoder:coder];
+//    if (self) {
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wundeclared-selector"
+//#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+//        SEL setResumeEditingOnCancel = NSSelectorFromString([@"setResume" stringByAppendingString:@"EditingOnCancel:"]);
+//        if ([self respondsToSelector:setResumeEditingOnCancel]) {
+//            [self performSelector:setResumeEditingOnCancel withObject:@(YES)];
+//        }
+//#pragma clang diagnostic pop
+//    }
+//    return self;
+//}
 
 @end

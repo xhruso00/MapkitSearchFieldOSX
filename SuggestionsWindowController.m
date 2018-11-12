@@ -49,7 +49,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 #import "SuggestionsWindowController.h"
 #import "HighlightingView.h"
 #import "SuggestionsWindow.h"
-#import "SuggestibleTextFieldCell.h"
+#import "MapSearchFieldCell.h"
 
 APPKIT_EXTERN NSString *kSuggestionImage;
 
@@ -235,7 +235,6 @@ APPKIT_EXTERN NSString *kSuggestionImage;
             break;
         }
     }
-    
     return suggestion;
 }
 

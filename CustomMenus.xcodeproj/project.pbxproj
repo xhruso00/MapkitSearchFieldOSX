@@ -13,12 +13,13 @@
 		8724A6AD11AF3CE90057E785 /* SuggestionsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8724A6AC11AF3CE90057E785 /* SuggestionsWindow.m */; };
 		87A62A2F11A9FF80003BFB8D /* suggestionprototype.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87A62A2D11A9FF80003BFB8D /* suggestionprototype.xib */; };
 		87A62DF811AA4E74003BFB8D /* HighlightingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A62DF711AA4E74003BFB8D /* HighlightingView.m */; };
-		87A62F6111AB5081003BFB8D /* SuggestibleTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A62F6011AB5081003BFB8D /* SuggestibleTextFieldCell.m */; };
 		87CD530E11A9AD0C00B510D3 /* RoundedCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CD530D11A9AD0C00B510D3 /* RoundedCornersView.m */; };
 		87CD531111A9AE5D00B510D3 /* SuggestionsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CD531011A9AE5D00B510D3 /* SuggestionsWindowController.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		D2970DFB2199FE6100D9A9C0 /* MapSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */; };
+		D2970DFE2199FE6700D9A9C0 /* MapDelayedSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFD2199FE6700D9A9C0 /* MapDelayedSpinner.m */; };
 		D2DDFFED2195F45500C11D8A /* MapSearchField.m in Sources */ = {isa = PBXBuildFile; fileRef = D2DDFFEC2195F45500C11D8A /* MapSearchField.m */; };
 		D2DDFFEF219616FA00C11D8A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2DDFFEE219616FA00C11D8A /* MapKit.framework */; };
 /* End PBXBuildFile section */
@@ -40,14 +41,16 @@
 		87A62A2E11A9FF80003BFB8D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/suggestionprototype.xib; sourceTree = "<group>"; };
 		87A62DF611AA4E74003BFB8D /* HighlightingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightingView.h; sourceTree = "<group>"; };
 		87A62DF711AA4E74003BFB8D /* HighlightingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighlightingView.m; sourceTree = "<group>"; };
-		87A62F5F11AB5081003BFB8D /* SuggestibleTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuggestibleTextFieldCell.h; sourceTree = "<group>"; };
-		87A62F6011AB5081003BFB8D /* SuggestibleTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuggestibleTextFieldCell.m; sourceTree = "<group>"; };
 		87CD530C11A9AD0C00B510D3 /* RoundedCornersView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundedCornersView.h; sourceTree = "<group>"; };
 		87CD530D11A9AD0C00B510D3 /* RoundedCornersView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundedCornersView.m; sourceTree = "<group>"; };
 		87CD530F11A9AE5D00B510D3 /* SuggestionsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuggestionsWindowController.h; sourceTree = "<group>"; };
 		87CD531011A9AE5D00B510D3 /* SuggestionsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuggestionsWindowController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* CustomMenus-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CustomMenus-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CustomMenus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomMenus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2970DF92199FE6100D9A9C0 /* MapSearchFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSearchFieldCell.h; sourceTree = "<group>"; };
+		D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSearchFieldCell.m; sourceTree = "<group>"; };
+		D2970DFC2199FE6700D9A9C0 /* MapDelayedSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelayedSpinner.h; sourceTree = "<group>"; };
+		D2970DFD2199FE6700D9A9C0 /* MapDelayedSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapDelayedSpinner.m; sourceTree = "<group>"; };
 		D2DDFFEB2195F45500C11D8A /* MapSearchField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSearchField.h; sourceTree = "<group>"; };
 		D2DDFFEC2195F45500C11D8A /* MapSearchField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapSearchField.m; sourceTree = "<group>"; };
 		D2DDFFEE219616FA00C11D8A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -156,10 +159,12 @@
 				8724A6AC11AF3CE90057E785 /* SuggestionsWindow.m */,
 				87A62DF611AA4E74003BFB8D /* HighlightingView.h */,
 				87A62DF711AA4E74003BFB8D /* HighlightingView.m */,
-				87A62F5F11AB5081003BFB8D /* SuggestibleTextFieldCell.h */,
-				87A62F6011AB5081003BFB8D /* SuggestibleTextFieldCell.m */,
+				D2970DF92199FE6100D9A9C0 /* MapSearchFieldCell.h */,
+				D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */,
 				D2DDFFEB2195F45500C11D8A /* MapSearchField.h */,
 				D2DDFFEC2195F45500C11D8A /* MapSearchField.m */,
+				D2970DFC2199FE6700D9A9C0 /* MapDelayedSpinner.h */,
+				D2970DFD2199FE6700D9A9C0 /* MapDelayedSpinner.m */,
 			);
 			name = "Suggestions Popup";
 			sourceTree = "<group>";
@@ -244,10 +249,11 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				D2DDFFED2195F45500C11D8A /* MapSearchField.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* CustomMenusAppDelegate.m in Sources */,
+				D2970DFE2199FE6700D9A9C0 /* MapDelayedSpinner.m in Sources */,
 				87CD530E11A9AD0C00B510D3 /* RoundedCornersView.m in Sources */,
 				87CD531111A9AE5D00B510D3 /* SuggestionsWindowController.m in Sources */,
+				D2970DFB2199FE6100D9A9C0 /* MapSearchFieldCell.m in Sources */,
 				87A62DF811AA4E74003BFB8D /* HighlightingView.m in Sources */,
-				87A62F6111AB5081003BFB8D /* SuggestibleTextFieldCell.m in Sources */,
 				8724A6AD11AF3CE90057E785 /* SuggestionsWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

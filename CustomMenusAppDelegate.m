@@ -47,6 +47,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 #import "CustomMenusAppDelegate.h"
 #import "MapSearchField.h"
+#import "MapSearchFieldCell.h"
 
 @interface CustomMenusAppDelegate ()
 
@@ -69,16 +70,17 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 /* This method is invoked when the user preses return (or enter) on the search text field. We don't want to use the text from the search field as it is just the image filename without a path. Also, it may not be valid. Instead, use this user action to trigger setting the large image view in the main window to the currently suggested URL, if there is one.
 */
 - (IBAction)performLocalSearch:(MapSearchField *)sender {
-    NSImage *image = nil;
     NSLog(@"%@", sender);
     NSLog(@"%@", [sender suggestedCompletion]);
     NSLog(@"%@", [sender stringValue]);
     MKLocalSearchCompletion *completion = [sender suggestedCompletion];
     if (completion) {
+        [[sender cell] startSpinner];
         MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc] initWithCompletion:completion];
         MKLocalSearch *localSearch = [[MKLocalSearch alloc] initWithRequest:request];
         [self setLocalSearch:localSearch];
         [localSearch startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
+            [[sender cell] stopSpinner];
             if (error) {
                 NSLog(@"%@", error);
             } else {
@@ -94,5 +96,6 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
         }];
     }
 }
+
 
 @end
