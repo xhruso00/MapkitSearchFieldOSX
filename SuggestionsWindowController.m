@@ -294,7 +294,14 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     for (NSDictionary *entry in _suggestions) {
         frame.origin.y += frame.size.height;
         
-        NSViewController *viewController = [[NSViewController alloc] initWithNibName:@"suggestionprototype" bundle:nil];
+        NSViewController *viewController;
+        
+        if ([[entry objectForKey:kSuggestionDetailedLabel] isEqualToString:@""]) {
+            viewController = [[NSViewController alloc] initWithNibName:@"suggestionprototype1" bundle:nil];
+        } else {
+            viewController = [[NSViewController alloc] initWithNibName:@"suggestionprototype2" bundle:nil];
+        }
+        
         HighlightingView *view = (HighlightingView*)viewController.view;
         
         // Make the selectedView the samee as the 0th.
