@@ -18,6 +18,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		D21F8530219A067600EC0664 /* suggestionprototype2.xib in Resources */ = {isa = PBXBuildFile; fileRef = D21F852E219A067600EC0664 /* suggestionprototype2.xib */; };
 		D2970DFB2199FE6100D9A9C0 /* MapSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */; };
 		D2970DFE2199FE6700D9A9C0 /* MapDelayedSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFD2199FE6700D9A9C0 /* MapDelayedSpinner.m */; };
 		D2970E012199FF9900D9A9C0 /* MyMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970E002199FF9900D9A9C0 /* MyMapView.m */; };
@@ -48,6 +49,7 @@
 		87CD531011A9AE5D00B510D3 /* SuggestionsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuggestionsWindowController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* CustomMenus-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CustomMenus-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CustomMenus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomMenus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D21F852F219A067600EC0664 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/suggestionprototype2.xib; sourceTree = "<group>"; };
 		D2970DF92199FE6100D9A9C0 /* MapSearchFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSearchFieldCell.h; sourceTree = "<group>"; };
 		D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSearchFieldCell.m; sourceTree = "<group>"; };
 		D2970DFC2199FE6700D9A9C0 /* MapDelayedSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelayedSpinner.h; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				87A62A2D11A9FF80003BFB8D /* suggestionprototype1.xib */,
+				D21F852E219A067600EC0664 /* suggestionprototype2.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D21F8530219A067600EC0664 /* suggestionprototype2.xib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				87A62A2F11A9FF80003BFB8D /* suggestionprototype1.xib in Resources */,
@@ -289,6 +293,14 @@
 				87A62A2E11A9FF80003BFB8D /* English */,
 			);
 			name = suggestionprototype1.xib;
+			sourceTree = "<group>";
+		};
+		D21F852E219A067600EC0664 /* suggestionprototype2.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D21F852F219A067600EC0664 /* English */,
+			);
+			name = suggestionprototype2.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
