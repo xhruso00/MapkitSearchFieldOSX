@@ -1,5 +1,5 @@
 #import "MyMapView.h"
-
+#import "CLLocation+Additions.h"
 
 @interface MyMapView() <CLLocationManagerDelegate,MKMapViewDelegate>
 
@@ -46,7 +46,9 @@
     [self setupLocationManager];
     [self addLocateMeButton];
     [self setDelegate:self];
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:51.507351 longitude:-0.127758];
+    CLLocationCoordinate2D coord = {51.507351, -0.127758};
+    NSAssert(CLLocationCoordinate2DIsValid(coord) == YES, @"Invalid location");
+    CLLocation *location = [CLLocation locationWithCoordinate:coord];
     [self setCurrentLocation:location resetAnnotations:YES];
 }
 
@@ -113,7 +115,7 @@
     NSMenu *menu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Map View Menu", nil)];
     CLLocationCoordinate2D coord = [self convertPoint:[event locationInWindow] toCoordinateFromView:nil];
     if (CLLocationCoordinate2DIsValid(coord)) {
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
+        CLLocation *location = [CLLocation locationWithCoordinate:coord];
         item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Drop Pin", nil) action:@selector(dropPin:) keyEquivalent:@""];
         [item setRepresentedObject:location];
         [menu addItem:item];
@@ -149,8 +151,18 @@
         if (returnCode == NSModalResponseOK) {
             double latitude = self.latitudeTextField.doubleValue;
             double longitude = self.longitudeTextField.doubleValue;
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
-            [self setCurrentLocation:location resetAnnotations:YES];
+            CLLocationCoordinate2D coord = {latitude, longitude};
+            if(CLLocationCoordinate2DIsValid(coord)) {
+                CLLocation *location = [CLLocation locationWithCoordinate:coord];
+                [self setCurrentLocation:location resetAnnotations:YES];
+            } else {
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:NSLocalizedString(@"Location Invalid", nil)];
+                [alert setAlertStyle:NSAlertStyleInformational];
+                [alert setIcon:[NSImage imageNamed:NSImageNameCaution]];
+                [alert setInformativeText:NSLocalizedString(@"Invalid location entered. Allowed values:\r\nLatitude: -90..90.\r\nLongitude: -180..180", nil)];
+                [alert runModal];
+            }
         }
     }];
 }
@@ -192,7 +204,7 @@
         [[self longitudeTextField] setDoubleValue:droppedAt.longitude];
         [[self latitudeTextField] setDoubleValue:droppedAt.latitude];
         
-        CLLocation *location = [[CLLocation alloc] initWithLatitude:droppedAt.latitude longitude:droppedAt.longitude];
+        CLLocation *location = [CLLocation locationWithCoordinate:droppedAt];
         [self setCurrentLocation:location resetAnnotations:NO];
     }
 }

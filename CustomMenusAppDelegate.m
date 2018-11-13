@@ -48,10 +48,12 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 #import "CustomMenusAppDelegate.h"
 #import "MapSearchField.h"
 #import "MapSearchFieldCell.h"
+#import "MyMapView.h"
+#import "CLLocation+Additions.h"
 
 @interface CustomMenusAppDelegate ()
 
-@property IBOutlet MKMapView *mapView;
+@property IBOutlet MyMapView *mapView;
 @property MKLocalSearch *localSearch;
 @end
 
@@ -84,13 +86,12 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
             if (error) {
                 NSLog(@"%@", error);
             } else {
-                [[self mapView] setRegion:[response boundingRegion]];
-                [[self mapView] removeAnnotations:[[self mapView] annotations]];
-                for (MKMapItem *item in [response mapItems]) {
-                    CLLocationCoordinate2D coord =  item.placemark.coordinate;
-                    MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-                    annotation.coordinate = coord;
-                    [[self mapView] addAnnotation:annotation];
+                MKPlacemark *placemark = [[[response mapItems] firstObject] placemark];
+                if (placemark) {
+                    CLLocation *location = [CLLocation locationWithCoordinate:placemark.coordinate];
+                    [[self mapView] setRegion:[response boundingRegion]];
+                    [[self mapView] removeAnnotations:[[self mapView] annotations]];
+                    [[self mapView] setLocation:location];
                 }
             }
         }];

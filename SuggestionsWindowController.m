@@ -123,7 +123,10 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     
     // Place the suggestion window just underneath the text field and make it the same width as th text field.
     NSPoint location = [parentTextField.superview convertPoint:parentFrame.origin toView:nil];
-    location = [parentWindow convertBaseToScreen:location];
+    
+    NSRect convertRect = [parentWindow convertRectToScreen:NSMakeRect(location.x, location.y, 0.0, 0.0)];
+    location = convertRect.origin;
+    //location = [parentWindow convertBaseToScreen:location];
     location.y -= 2.0f; // nudge the suggestion window down so it doesn't overlapp the parent view
     [suggestionWindow setFrame:frame display:NO];
     [suggestionWindow setFrameTopLeftPoint:location];
