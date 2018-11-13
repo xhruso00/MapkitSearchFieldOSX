@@ -19,6 +19,9 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		D21F8530219A067600EC0664 /* suggestionprototype2.xib in Resources */ = {isa = PBXBuildFile; fileRef = D21F852E219A067600EC0664 /* suggestionprototype2.xib */; };
+		D227F51B219A07BA00F98597 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D227F51A219A07BA00F98597 /* CoreLocation.framework */; };
+		D227F51E219AD79000F98597 /* entercoordinates.xib in Resources */ = {isa = PBXBuildFile; fileRef = D227F51C219AD79000F98597 /* entercoordinates.xib */; };
+		D240F4F3219B15D700D01F33 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D240F4F2219B15D700D01F33 /* Media.xcassets */; };
 		D2970DFB2199FE6100D9A9C0 /* MapSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */; };
 		D2970DFE2199FE6700D9A9C0 /* MapDelayedSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970DFD2199FE6700D9A9C0 /* MapDelayedSpinner.m */; };
 		D2970E012199FF9900D9A9C0 /* MyMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2970E002199FF9900D9A9C0 /* MyMapView.m */; };
@@ -50,6 +53,9 @@
 		8D1107310486CEB800E47090 /* CustomMenus-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CustomMenus-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* CustomMenus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomMenus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21F852F219A067600EC0664 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/suggestionprototype2.xib; sourceTree = "<group>"; };
+		D227F51A219A07BA00F98597 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D227F51D219AD79000F98597 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/entercoordinates.xib; sourceTree = "<group>"; };
+		D240F4F2219B15D700D01F33 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		D2970DF92199FE6100D9A9C0 /* MapSearchFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSearchFieldCell.h; sourceTree = "<group>"; };
 		D2970DFA2199FE6100D9A9C0 /* MapSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSearchFieldCell.m; sourceTree = "<group>"; };
 		D2970DFC2199FE6700D9A9C0 /* MapDelayedSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDelayedSpinner.h; sourceTree = "<group>"; };
@@ -66,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D227F51B219A07BA00F98597 /* CoreLocation.framework in Frameworks */,
 				D2DDFFEF219616FA00C11D8A /* MapKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 			);
@@ -135,9 +142,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D240F4F2219B15D700D01F33 /* Media.xcassets */,
 				8D1107310486CEB800E47090 /* CustomMenus-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				D227F51C219AD79000F98597 /* entercoordinates.xib */,
 				87A62A2D11A9FF80003BFB8D /* suggestionprototype1.xib */,
 				D21F852E219A067600EC0664 /* suggestionprototype2.xib */,
 			);
@@ -147,6 +156,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D227F51A219A07BA00F98597 /* CoreLocation.framework */,
 				D2DDFFEE219616FA00C11D8A /* MapKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
@@ -242,6 +252,8 @@
 			files = (
 				D21F8530219A067600EC0664 /* suggestionprototype2.xib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				D240F4F3219B15D700D01F33 /* Media.xcassets in Resources */,
+				D227F51E219AD79000F98597 /* entercoordinates.xib in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				87A62A2F11A9FF80003BFB8D /* suggestionprototype1.xib in Resources */,
 				2BD14C4012D64C0100C2A872 /* ReadMe.txt in Resources */,
@@ -301,6 +313,14 @@
 				D21F852F219A067600EC0664 /* English */,
 			);
 			name = suggestionprototype2.xib;
+			sourceTree = "<group>";
+		};
+		D227F51C219AD79000F98597 /* entercoordinates.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D227F51D219AD79000F98597 /* English */,
+			);
+			name = entercoordinates.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

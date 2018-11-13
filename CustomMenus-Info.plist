@@ -24,6 +24,12 @@
 	<string>1.4</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>asd</string>
+	<key>NSLocationUsageDescription</key>
+	<string>sddd</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>asdasd</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
