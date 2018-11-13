@@ -72,7 +72,7 @@
     [self setLocationManager:locationManager];
     [CLLocationManager authorizationStatus];
     if ([CLLocationManager locationServicesEnabled]) {
-        //[locationManager startUpdatingLocation];
+        [[self locationManager] startUpdatingLocation];
     }
 }
 
@@ -210,6 +210,24 @@
     [self setRegion:region];
     [self removeAnnotations:[self annotations]];
     [self addAnnotation:annotation];
+}
+
+#pragma mark -
+#pragma CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
+{
+    [manager stopUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [[NSAlert alertWithError:error] runModal];
 }
 
 @end
