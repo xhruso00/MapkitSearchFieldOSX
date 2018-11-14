@@ -7,6 +7,7 @@
 @interface MapSearchField() <MKLocalSearchCompleterDelegate, NSSearchFieldDelegate, NSTextFieldDelegate> {
 @private
     SuggestionsWindowController *_suggestionsController;
+    NSString *_userTypedString;
 }
 @property (strong) MKLocalSearchCompleter *searchCompleter;
 @property (strong) MKLocalSearch *localSearch;
@@ -54,6 +55,7 @@
 
 - (void)commonInit
 {
+    _userTypedString = @"";
     MKLocalSearchCompleter *searchCompleter = [[MKLocalSearchCompleter alloc] init];
     searchCompleter.filterType = MKSearchCompletionFilterTypeLocationsOnly;
     searchCompleter.delegate = self;
@@ -85,10 +87,17 @@
  */
 - (IBAction)updateWithSelectedSuggestion:(id)sender {
     NSDictionary *entry = [sender selectedSuggestion];
-    _suggestedCompletion = [entry objectForKey:kSuggestionCompletion];
-    NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
-    if (fieldEditor) {
-        [self updateFieldEditor:fieldEditor withSuggestion:[entry objectForKey:kSuggestionLabel]];
+    if (entry) {
+        _suggestedCompletion = [entry objectForKey:kSuggestionCompletion];
+        NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
+        if (fieldEditor) {
+            [self updateFieldEditor:fieldEditor withSuggestion:[entry objectForKey:kSuggestionLabel]];
+        }
+    } else {
+        NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
+        if (fieldEditor) {
+            [self updateFieldEditor:fieldEditor withSuggestion:_userTypedString];
+        }
     }
     
 }
@@ -121,13 +130,13 @@
 /* Update the field editor with a suggested string. The additional suggested characters are auto selected.
  */
 - (void)updateFieldEditor:(NSText *)fieldEditor withSuggestion:(NSString *)suggestion {
-    if (suggestion == nil){
-        [fieldEditor delete:self];
-    } else {
+//    if (suggestion == nil){
+//        [fieldEditor delete:self];
+//    } else {
         NSRange selection = NSMakeRange([fieldEditor selectedRange].location, [suggestion length]);
         [fieldEditor setString:suggestion];
         [fieldEditor setSelectedRange:selection];
-    }
+//    }
 }
 
 /* Determines the current list of suggestions, display the suggestions and update the field editor.
@@ -136,8 +145,9 @@
     NSText *fieldEditor = [self.window fieldEditor:NO forObject:control];
     if (fieldEditor) {
         // Only use the text up to the caret position
-        NSRange selection = [fieldEditor selectedRange];
-        NSString *text = [[fieldEditor string] substringToIndex:selection.location];
+        //NSRange selection = [fieldEditor selectedRange];
+        //NSString *text = [[fieldEditor string] substringToIndex:selection.location];
+        NSString *text = _userTypedString;
         if ([text length]) {
             [[self searchCompleter] cancel];
             [[self searchCompleter] setQueryFragment:text];
@@ -156,6 +166,13 @@
     }
     
     [self updateSuggestionsFromControl:notification.object];
+}
+
+- (void)textDidChange:(NSNotification *)notification
+{
+    [super textDidChange:notification];
+    _userTypedString = [self stringValue];
+    NSLog(@"_userTypedString %@", _userTypedString);
 }
 
 /* The field editor's text may have changed for a number of reasons. Generally, we should update the suggestions window with the new suggestions. However, in some cases (the user deletes characters) we cancel the suggestions window.
@@ -222,15 +239,15 @@
     if (commandSelector == @selector(cancelOperation:)) {
         if ([_suggestionsController.window isVisible]) {
             [_suggestionsController cancelSuggestions];
-            [[control currentEditor] delete:self];
             [[self searchCompleter] cancel];
+            [self updateWithSelectedSuggestion:nil];
             _suggestedCompletion = nil;
             _searchAutocompletions = nil;
             return YES;
+        } else {
+            _userTypedString = @"";
         }
         return NO;
-
-        
     }
     
     // This is a command that we don't specifically handle, let the field editor do the appropriate thing.
