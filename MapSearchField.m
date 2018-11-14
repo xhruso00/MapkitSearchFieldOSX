@@ -138,7 +138,6 @@
         // Only use the text up to the caret position
         NSRange selection = [fieldEditor selectedRange];
         NSString *text = [[fieldEditor string] substringToIndex:selection.location];
-        
         if ([text length]) {
             [[self searchCompleter] cancel];
             [[self searchCompleter] setQueryFragment:text];
@@ -260,9 +259,9 @@
         NSArray *suggestions = [self suggestionsForText:text];
         if ([suggestions count] > 0) {
             // We have at least 1 suggestion. Update the field editor to the first suggestion and show the suggestions window.
-            NSDictionary *suggestion = [suggestions objectAtIndex:0];
-            _suggestedCompletion = [suggestion objectForKey:kSuggestionCompletion];
-            [self updateFieldEditor:fieldEditor withSuggestion:[suggestion objectForKey:kSuggestionLabel]];
+            //NSDictionary *suggestion = [suggestions objectAtIndex:0];
+            //_suggestedCompletion = [suggestion objectForKey:kSuggestionCompletion];
+            //[self updateFieldEditor:fieldEditor withSuggestion:[suggestion objectForKey:kSuggestionLabel]];
             
             [_suggestionsController setSuggestions:suggestions];
             if (![_suggestionsController.window isVisible]) {

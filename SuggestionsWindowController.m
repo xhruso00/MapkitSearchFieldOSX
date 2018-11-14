@@ -309,7 +309,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         
         // Make the selectedView the samee as the 0th.
         if([_viewControllers count] == 0) {
-            self.selectedView = view;
+            //self.selectedView = view;
         }
         
         // Use the height of set in IB of the prototype view as the heigt for the suggestion view.
