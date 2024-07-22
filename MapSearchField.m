@@ -57,7 +57,11 @@
 {
     _userTypedString = @"";
     MKLocalSearchCompleter *searchCompleter = [[MKLocalSearchCompleter alloc] init];
-    searchCompleter.filterType = MKSearchCompletionFilterTypeLocationsOnly;
+    if (@available(macOS 10.15, *)) {
+        searchCompleter.resultTypes = MKLocalSearchCompleterResultTypeAddress|MKLocalSearchCompleterResultTypePointOfInterest;
+    } else {
+        searchCompleter.filterType = MKSearchCompletionFilterTypeLocationsOnly;
+    }
     searchCompleter.delegate = self;
     [self setSearchCompleter:searchCompleter];
     [self setDelegate:self];
