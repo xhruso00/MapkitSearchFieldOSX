@@ -55,10 +55,10 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 - (void)drawRect:(NSRect)dirtyRect {
     if (self.highlighted) {
         [[NSColor alternateSelectedControlColor] set];
-        NSRectFillUsingOperation(dirtyRect, NSCompositingOperationSourceOver);
+        NSRectFillUsingOperation([self bounds], NSCompositingOperationSourceOver);
     }else {
         [[NSColor clearColor] set];
-        NSRectFillUsingOperation(dirtyRect, NSCompositingOperationSourceOver);
+        NSRectFillUsingOperation([self bounds], NSCompositingOperationSourceOver);
     }
 }
 
