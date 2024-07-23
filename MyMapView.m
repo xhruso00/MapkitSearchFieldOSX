@@ -17,7 +17,7 @@
 {
     [super awakeFromNib];
     if ([CLLocationManager locationServicesEnabled]) {
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+        if ([[self locationManager] authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
             [self determineCurrentLocationAction:nil];
         }
     }
@@ -72,7 +72,7 @@
     CLLocationManager *locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
     [self setLocationManager:locationManager];
-    [CLLocationManager authorizationStatus];
+    [locationManager authorizationStatus];
     if ([CLLocationManager locationServicesEnabled]) {
         [[self locationManager] startUpdatingLocation];
     }
@@ -127,10 +127,20 @@
 
 - (IBAction)determineCurrentLocationAction:(id)sender
 {
+    if ([[self locationManager] authorizationStatus] == kCLAuthorizationStatusDenied) {
+        [self openPrivacyLocationAction:nil];
+    }
     CLLocation *location = [[self locationManager] location];
     if (location) {
         [self setCurrentLocation:location resetAnnotations:YES];
     }
+}
+
+- (IBAction)openPrivacyLocationAction:(id)sender
+{
+    NSString *privacyPath = @"x-apple.systempreferences:com.apple.preference.security?Privacy_LocationServices";
+    NSURL *URL = [NSURL URLWithString:privacyPath];
+    [[NSWorkspace sharedWorkspace] openURL:URL];
 }
 
 - (void)dropPin:(id)sender
@@ -227,9 +237,9 @@
 #pragma mark -
 #pragma CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager
 {
-    
+
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations

@@ -55,7 +55,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 */
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
     NSColor *textColor = [self textColor];
-    if ([self backgroundStyle] == NSBackgroundStyleDark) {
+    if ([self backgroundStyle] == NSBackgroundStyleEmphasized) {
         [self setTextColor:[NSColor whiteColor]];
     }
 
@@ -69,29 +69,12 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     return YES;
 }
 
-#pragma mark -
-#pragma mark Accessibility
-
-/* The search text field in the MainMenu.xib has the class for its cell set to this class so that it will report the suggestions window as one of its accessibility children when the suggestions window is present.
-*/
-- (id)accessibilityAttributeValue:(NSString *)attribute {
-    id attributeValue;
-    
-    if ([attribute isEqualToString:NSAccessibilityChildrenAttribute] && _suggestionsWindow) {
-        attributeValue = [[super accessibilityAttributeValue:NSAccessibilityChildrenAttribute] arrayByAddingObject:NSAccessibilityUnignoredDescendant(_suggestionsWindow)];
-    } else {
-        attributeValue =  [super accessibilityAttributeValue:attribute];
-    }
-    
-    return attributeValue;
-}
-
 - (NSRect)cancelButtonRectForBounds:(NSRect)rect
 {
     rect = [super cancelButtonRectForBounds:rect];
     if ([[self spinner] spins]) {
-        if ([[self spinner] isHidden]) {
-            rect = NSZeroRect;
+        if ([[self spinner] isHidden] == NO) {
+            rect.size = NSZeroSize;
         }
     }
     return rect;

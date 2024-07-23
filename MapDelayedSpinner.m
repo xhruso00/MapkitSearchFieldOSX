@@ -136,9 +136,4 @@
     [[self superview] setNeedsLayout:YES];
 }
 
-- (BOOL)accessibilityIsIgnored
-{
-    return YES;
-}
-
 @end
