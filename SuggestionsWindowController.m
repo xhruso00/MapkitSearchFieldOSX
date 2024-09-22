@@ -148,8 +148,10 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     }
     NSAccessibilityPostNotification(NSAccessibilityUnignoredDescendant(suggestionWindow),  NSAccessibilityCreatedNotification);
     
+    __weak typeof(self) weakSelf = self;
     // setup auto cancellation if the user clicks outside the suggestion window and parent text field. Note: this is a local event monitor and will only catch clicks in windows that belong to this application. We use another technique below to catch clicks in other application windows.
     _localMouseDownEventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskLeftMouseDown|NSEventMaskRightMouseDown|NSEventTypeOtherMouseDown handler:^(NSEvent *event) {
+        __strong typeof(self) strongSelf = weakSelf;
         // If the mouse event is in the suggestion window, then there is nothing to do.
         if ([event window] != suggestionWindow) {
             if ([event window] == parentWindow) {
@@ -164,11 +166,11 @@ APPKIT_EXTERN NSString *kSuggestionImage;
                 if (hitView != parentTextField && (fieldEditor && hitView != fieldEditor) ) {
                     // Since the click is not in the parent text field, return nil, so the parent window does not try to process it, and cancel the suggestion window.
                     event = nil;
-                    [self cancelSuggestions];
+                    [strongSelf cancelSuggestions];
                 }
             } else {
                 // Not in the suggestion window, and not in the parent window. This must be another window or palette for this application.
-                [self cancelSuggestions];
+                [strongSelf cancelSuggestions];
             }
         } 
         
@@ -178,8 +180,9 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     
     // We also need to auto cancel when the window loses key status. This may be done via a mouse click in another window, or via the keyboard (cmd-~ or cmd-tab), or a notificaiton. Observing NSWindowDidResignKeyNotification catches all of these cases and the mouse down event monitor catches the other cases.
     _lostFocusObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResignKeyNotification object:parentWindow queue:nil usingBlock:^(NSNotification *arg1) {
+        __strong typeof(self) strongSelf = weakSelf;
         // lost key status, cancel the suggestion window
-        [self cancelSuggestions];
+        [strongSelf cancelSuggestions];
     }];
 }
 
@@ -239,6 +242,15 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         }
     }
     return suggestion;
+}
+
+- (void)dealloc {
+    if (_lostFocusObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:_lostFocusObserver];
+    }
+    if (_localMouseDownEventMonitor) {
+        [NSEvent removeMonitor:_localMouseDownEventMonitor];
+    }
 }
 
 #pragma mark -
