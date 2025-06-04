@@ -9,7 +9,7 @@
     
 }
 
-- (void)setLocation:(CLLocation *)location;
+- (void)setPinLocation:(CLLocation *)location;
 
 @property (nonatomic, weak) id<MyMapViewDelegate> myDelegate;
 

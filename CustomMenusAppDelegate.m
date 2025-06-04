@@ -90,8 +90,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
                 if (placemark) {
                     CLLocation *location = [CLLocation locationWithCoordinate:placemark.coordinate];
                     [[self mapView] setRegion:[response boundingRegion]];
-                    [[self mapView] removeAnnotations:[[self mapView] annotations]];
-                    [[self mapView] setLocation:location];
+                    [[self mapView] setPinLocation:location];
                 }
             }
         }];
