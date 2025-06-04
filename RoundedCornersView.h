@@ -48,10 +48,8 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 #import <Cocoa/Cocoa.h>
 
 
-@interface RoundedCornersView : NSView {
-@private
-    CGFloat _cornerRadius;
-}
+@interface RoundedCornersView : NSView
 
-@property (assign) CGFloat rcvCornerRadius;
+@property (assign, readonly) CGFloat cornerRadius;
+
 @end

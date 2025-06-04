@@ -49,17 +49,16 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 @implementation HighlightingView
 
-@synthesize highlighted = _highlighted;
-
 // Draw with or without a highlight style
 - (void)drawRect:(NSRect)dirtyRect {
-    if (self.highlighted) {
-        [[NSColor selectedContentBackgroundColor] set];
-        NSRectFillUsingOperation([self bounds], NSCompositingOperationSourceOver);
-    }else {
-        [[NSColor clearColor] set];
-        NSRectFillUsingOperation([self bounds], NSCompositingOperationSourceOver);
+    NSColor *fillColor;
+    if ([self isHighlighted]) {
+        fillColor = [NSColor selectedContentBackgroundColor];
+    } else {
+        fillColor = [NSColor clearColor];
     }
+    [fillColor setFill];
+    NSRectFillUsingOperation([self bounds], NSCompositingOperationSourceOver);
 }
 
 /* Custom highlighted property setter because when the property changes we need to redraw and update the containing text fields.
@@ -69,7 +68,13 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
         _highlighted = highlighted;
         
         // Inform each contained text field what type of background they will be displayed on. This is how the txt field knows when to draw white text instead of black text.
-        for (NSView *subview in [self subviews]) {
+        NSArray<NSView*>*subviews = [self subviews];
+        NSArray<NSView*>*subviewsToTraverse = subviews;
+        if ([[subviews firstObject] isKindOfClass:[NSStackView class]]) {
+            subviewsToTraverse = [[subviews firstObject] subviews];
+        }
+
+        for (NSView *subview in subviewsToTraverse) {
             if ([subview isKindOfClass:[NSTextField class]]) {
                 [[(NSTextField*)subview cell] setBackgroundStyle:highlighted ? NSBackgroundStyleEmphasized : NSBackgroundStyleNormal];
             }

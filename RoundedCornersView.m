@@ -50,24 +50,28 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 @implementation RoundedCornersView
 
-@synthesize rcvCornerRadius = _cornerRadius;
-
-- (id)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.rcvCornerRadius = 10.0f;
+        [self commonInit];
     }
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
 
-    CGFloat cornerRadius = self.rcvCornerRadius;
-    
-    NSBezierPath *borderPath = [NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:cornerRadius yRadius:cornerRadius];
-
-    [[NSColor windowBackgroundColor] setFill];
-    [borderPath fill];
+- (void)commonInit
+{
+    _cornerRadius = 10.0f;
+    [self setWantsLayer:YES];
+    [[self layer] setCornerRadius:[self cornerRadius]];
+    [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
 }
 
 - (BOOL)isFlipped {

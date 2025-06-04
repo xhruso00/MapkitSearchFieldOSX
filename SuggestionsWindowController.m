@@ -305,7 +305,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     NSRect frame;
     frame.size.height = 0.0f;
     frame.size.width = NSWidth(contentFrame);
-    frame.origin = NSMakePoint(0, contentView.rcvCornerRadius); // offset the Y posistion so that the suggetion view does not try to draw past the rounded corners.
+    frame.origin = NSMakePoint(0, contentView.cornerRadius); // offset the Y posistion so that the suggetion view does not try to draw past the rounded corners.
     for (NSDictionary *entry in _suggestions) {
         frame.origin.y += frame.size.height;
         
@@ -345,7 +345,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     */
     
     // Don't forget to account for the extra room needed the rounded corners.
-    contentFrame.size.height = NSMaxY(frame) + contentView.rcvCornerRadius;
+    contentFrame.size.height = NSMaxY(frame) + contentView.cornerRadius;
     
     NSRect winFrame = window.frame;
     winFrame.origin.y = NSMaxY(winFrame) - NSHeight(contentFrame);
