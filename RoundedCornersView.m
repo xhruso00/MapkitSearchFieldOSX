@@ -76,6 +76,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 - (void)updateLayer
 {
+    [super updateLayer];
     [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
 }
 
