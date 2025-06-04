@@ -74,6 +74,11 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
 }
 
+- (void)updateLayer
+{
+    [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
+}
+
 - (BOOL)isFlipped {
     return YES;
 }
