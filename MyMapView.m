@@ -16,7 +16,6 @@ typedef NS_ENUM(NSInteger, MKLocationErrorCode) {
 @property IBOutlet NSTextField *longitudeTextField;
 @property IBOutlet NSWindow *sheet;
 @property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) CLLocation *currentLocation;
 @property (nonatomic) MKPointAnnotation *pinAnnotation;
 
 @end
