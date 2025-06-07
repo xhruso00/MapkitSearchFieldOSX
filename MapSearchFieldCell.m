@@ -53,16 +53,17 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 /* Force NSTextFieldCell to use white as the text color when drawing on a dark background. NSTextField does this by default when the text color is set to black. In the suggestionsprototype.xib, there is an NSTextField that has a blueish text color. In IB we set the cell of that text field to this class to get the drawing behavior we want.
 */
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-    NSColor *textColor = [self textColor];
-    if ([self backgroundStyle] == NSBackgroundStyleEmphasized) {
-        [self setTextColor:[NSColor whiteColor]];
-    }
-
-    [super drawWithFrame:cellFrame inView:controlView];
-
-    [self setTextColor:textColor];
-}
+//- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+//    NO LONGER NECESSARY AS OF 10.14
+//    NSColor *textColor = [self textColor];
+//    if ([self backgroundStyle] == NSBackgroundStyleEmphasized) {
+//        [self setTextColor:[NSColor whiteColor]];
+//    }
+//
+//    [super drawWithFrame:cellFrame inView:controlView];
+//
+//    [self setTextColor:textColor];
+//}
 
 - (BOOL)sendsWholeSearchString
 {
