@@ -50,38 +50,39 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 @implementation RoundedCornersView
 
-- (instancetype)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
-        [self commonInit];
+        self.material = NSVisualEffectMaterialMenu;
+        self.state = NSVisualEffectStateActive;
+        self.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+        
+        CGFloat cornerRadius = [self cornerRadius];
+        NSImage *maskImage = [NSImage imageWithSize:NSMakeSize(cornerRadius * 2.0f, cornerRadius * 2.0f) flipped:YES drawingHandler:^BOOL(NSRect dstRect) {
+            NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:dstRect xRadius:cornerRadius yRadius:cornerRadius];
+            [[NSColor blackColor] setFill];
+            [path fill];
+            return path;
+        }];
+        maskImage.capInsets = NSEdgeInsetsMake(cornerRadius, cornerRadius, cornerRadius, cornerRadius);
+        maskImage.resizingMode = NSImageResizingModeStretch;
+        
+        /// needs to be added as a subview in order to have the corners rounded with cornerRadius
+        //self.wantsLayer = YES;
+        //self.layer?.cornerRadius = cornerRadius;
+        self.maskImage = maskImage;
     }
     return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    self = [super initWithCoder:coder];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit
-{
-    _cornerRadius = 10.0f;
-    [self setWantsLayer:YES];
-    [[self layer] setCornerRadius:[self cornerRadius]];
-    [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
-}
-
-- (void)updateLayer
-{
-    [super updateLayer];
-    [[self layer] setBackgroundColor:[[NSColor windowBackgroundColor] CGColor]];
 }
 
 - (BOOL)isFlipped {
     return YES;
+}
+
+- (CGFloat)cornerRadius
+{
+    return 10.0f;
 }
 
 @end

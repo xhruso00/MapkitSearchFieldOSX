@@ -47,8 +47,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 #import <Cocoa/Cocoa.h>
 
-
-@interface RoundedCornersView : NSView
+@interface RoundedCornersView : NSVisualEffectView
 
 @property (assign, readonly) CGFloat cornerRadius;
 
