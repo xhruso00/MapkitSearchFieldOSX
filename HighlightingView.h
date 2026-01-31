@@ -47,7 +47,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 #import <Cocoa/Cocoa.h>
 
-@interface HighlightingView : NSView
+@interface HighlightingView : NSTableCellView
 
 @property (assign, nonatomic, getter=isHighlighted) BOOL highlighted;
 

@@ -68,20 +68,12 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
         _highlighted = highlighted;
         
         // Inform each contained text field what type of background they will be displayed on. This is how the txt field knows when to draw white text instead of black text.
-        NSArray<NSView*>*subviews = [self subviews];
-        NSArray<NSView*>*subviewsToTraverse = subviews;
-        if ([[subviews firstObject] isKindOfClass:[NSStackView class]]) {
-            subviewsToTraverse = [[subviews firstObject] subviews];
-        }
-
-        for (NSView *subview in subviewsToTraverse) {
-            if ([subview isKindOfClass:[NSTextField class]]) {
-                [[(NSTextField*)subview cell] setBackgroundStyle:highlighted ? NSBackgroundStyleEmphasized : NSBackgroundStyleNormal];
-            }
-        }
+        /// NSTableCellView automatically propagates background style to all it's subviews
+        NSBackgroundStyle style = highlighted ? NSBackgroundStyleEmphasized : NSBackgroundStyleNormal;
+        [self setBackgroundStyle:style];
+    }
         
         [self setNeedsDisplay:YES]; // make sure we redraw with the correct highlight style.
-    }
 }
 
 @end
