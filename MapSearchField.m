@@ -98,6 +98,7 @@
         if (fieldEditor) {
             [self updateFieldEditor:fieldEditor withSuggestion:_userTypedString];
         }
+        _suggestedCompletion = nil;
     }
     
 }
@@ -262,7 +263,6 @@
             [_suggestionsController cancelSuggestions];
             [[self searchCompleter] cancel];
             [self updateWithSelectedSuggestion:nil];
-            _suggestedCompletion = nil;
             _searchAutocompletions = nil;
             return YES;
         } else {
@@ -294,6 +294,7 @@
         [self showCompletions];
     } else {
         [_suggestionsController cancelSuggestions];
+        [self updateWithSelectedSuggestion:nil];
     }
 }
 
