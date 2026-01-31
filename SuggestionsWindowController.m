@@ -106,11 +106,11 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 /* Set selected view and send action
 */
 - (void)userSetSelectedView:(NSView *)view {
-    self.selectedView = view;
-
-    [NSApp sendAction:self.action to:self.target from:self];
+    if (self.selectedView != view) {
+        self.selectedView = view;
+        [NSApp sendAction:self.action to:self.target from:self];
+    }
 }
-
 
 /* Position and lay out the suggestions window, set up auto cancelling tracking, and wires up the logical relationship for accessibility. 
 */
@@ -363,6 +363,10 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 /* The mouse has left one of our child image views. Set the selection to no selection and send action
 */
 - (void)mouseExited:(NSEvent*)event {
+    /// after clicking on a row, window is dismissed but the event is still fired
+    if (![[self window] isVisible]) {
+        return;
+    }
     [self userSetSelectedView:nil];
 }
 

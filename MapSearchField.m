@@ -77,7 +77,7 @@
 /* This method is invoked when the user preses return (or enter) on the search text field. We don't want to use the text from the search field as it is just the image filename without a path. Also, it may not be valid. Instead, use this user action to trigger setting the large image view in the main window to the currently suggested URL, if there is one.
  */
 - (IBAction)performLocalSearch:(id)sender {
-    NSImage *image = nil;
+    __unused NSImage *image = nil;
     if(_suggestedCompletion) {
         //image = [[NSImage alloc] initWithContentsOfURL:_suggestedURL];
     }
