@@ -104,7 +104,7 @@
 
 /* Recursively search through all the image files starting at the _baseURL for image file names that begin with the supplied string. It returns an array of NSDictionaries. Each dictionary contains a label, detailed label and an url with keys that match the binding used by each custom suggestion view defined in suggestionprototype.xib.
  */
-- (NSArray *)suggestionsForText:(NSString*)text {
+- (NSArray<NSDictionary*>*)suggestionsForText:(NSString*)text {
     // We don't want to hit the disk every time we need to re-calculate the the suggestion list. So we cache the result from disk. If we really wanted to be fancy, we could listen for changes to the file system at the _baseURL to know when the cache is out of date.
     
     // Search the known image URLs array for matches.
@@ -145,13 +145,9 @@
     NSText *fieldEditor = [self.window fieldEditor:NO forObject:control];
     if (fieldEditor) {
         // Only use the text up to the caret position
-        //NSRange selection = [fieldEditor selectedRange];
-        //NSString *text = [[fieldEditor string] substringToIndex:selection.location];
-        NSString *text = _userTypedString;
-        if ([text length]) {
-            [[self searchCompleter] cancel];
-            [[self searchCompleter] setQueryFragment:text];
-        }
+        NSRange selection = [fieldEditor selectedRange];
+        NSString *text = [[fieldEditor string] substringToIndex:selection.location];
+        [self setSearchString:text];
     }
 }
 
@@ -164,15 +160,40 @@
         _suggestionsController.target = self;
         _suggestionsController.action = @selector(updateWithSelectedSuggestion:);
     }
-    
-    [self updateSuggestionsFromControl:notification.object];
 }
 
-- (void)textDidChange:(NSNotification *)notification
+- (void)setSearchString:(NSString *)searchString
 {
-    [super textDidChange:notification];
-    _userTypedString = [self stringValue];
-    NSLog(@"_userTypedString %@", _userTypedString);
+    if (_userTypedString != searchString) {
+        if (![_userTypedString isEqualToString:searchString]) {
+            if([searchString length] < [_userTypedString length]) {
+                _skipNextSuggestion = YES; //isDeleting
+            }
+            _userTypedString = [searchString copy];
+            [self startAutocompletion];
+        }
+    }
+}
+
+- (void)startAutocompletion
+{
+    if ([_userTypedString length]) {
+        [[self searchCompleter] setQueryFragment:_userTypedString];
+    }
+}
+
+- (void)showCompletions
+{
+    if ([[self searchAutocompletions] count]) {
+        if ([_userTypedString length]) {
+            NSArray<NSDictionary*>*suggestions = [self suggestionsForText:nil]; //BUG; we are losing order, needs NSArray
+            [_suggestionsController setSuggestions:suggestions];
+            if (![_suggestionsController.window isVisible]) {
+                [_suggestionsController beginForTextField:self];
+            }
+        }
+    }
+    [_suggestionsController cancelSuggestions];
 }
 
 /* The field editor's text may have changed for a number of reasons. Generally, we should update the suggestions window with the new suggestions. However, in some cases (the user deletes characters) we cancel the suggestions window.
@@ -183,7 +204,6 @@
         [self updateSuggestionsFromControl:notification.object];
     } else {
         // If we are skipping this suggestion, the set the _suggestedURL to nil and cancel the suggestions window.
-        _suggestedCompletion = nil;
         
         // If the suggestionController is already in a cancelled state, this call does nothing and is therefore always safe to call.
         [_suggestionsController cancelSuggestions];
@@ -266,29 +286,13 @@
 
 - (void)completerDidUpdateResults:(MKLocalSearchCompleter *)completer
 {
-    [self setSearchAutocompletions:[completer results]];
-    NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
-    if (fieldEditor) {
-        // Only use the text up to the caret position
-        NSRange selection = [fieldEditor selectedRange];
-        NSString *text = [[fieldEditor string] substringToIndex:selection.location];
-        
-        NSArray *suggestions = [self suggestionsForText:text];
-        if ([suggestions count] > 0) {
-            // We have at least 1 suggestion. Update the field editor to the first suggestion and show the suggestions window.
-            //NSDictionary *suggestion = [suggestions objectAtIndex:0];
-            //_suggestedCompletion = [suggestion objectForKey:kSuggestionCompletion];
-            //[self updateFieldEditor:fieldEditor withSuggestion:[suggestion objectForKey:kSuggestionLabel]];
-            
-            [_suggestionsController setSuggestions:suggestions];
-            if (![_suggestionsController.window isVisible]) {
-                [_suggestionsController beginForTextField:self];
-            }
-        } else {
-            // No suggestions. Cancel the suggestion window and set the _suggestedURL to nil.
-            _suggestedCompletion = nil;
-            [_suggestionsController cancelSuggestions];
-        }
+    _suggestedCompletion = nil;
+    NSArray<MKLocalSearchCompletion*>*completions = [completer results];
+    [self setSearchAutocompletions:completions];
+    if ([completions count]) {
+        [self showCompletions];
+    } else {
+        [_suggestionsController cancelSuggestions];
     }
 }
 
