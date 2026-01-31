@@ -191,6 +191,7 @@
             if (![_suggestionsController.window isVisible]) {
                 [_suggestionsController beginForTextField:self];
             }
+            return;
         }
     }
     [_suggestionsController cancelSuggestions];
