@@ -277,9 +277,7 @@
 
 - (void)cancelOperation:(nullable id)sender
 {
-    if ([[self stringValue] length] == 0) {
-        [[self window] makeFirstResponder:[self window]];
-    }
+    [[self window] makeFirstResponder:[self window]];
 }
 
 #pragma mark -

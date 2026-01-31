@@ -75,26 +75,34 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     NSLog(@"%@", sender);
     NSLog(@"%@", [sender suggestedCompletion]);
     NSLog(@"%@", [sender stringValue]);
+    
+    NSString *searchString = [sender stringValue];
+    if ([searchString length] == 0) { return; }
+    
     MKLocalSearchCompletion *completion = [sender suggestedCompletion];
+    
+    [[sender cell] startSpinner];
+    MKLocalSearchRequest *request;
     if (completion) {
-        [[sender cell] startSpinner];
-        MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc] initWithCompletion:completion];
-        MKLocalSearch *localSearch = [[MKLocalSearch alloc] initWithRequest:request];
-        [self setLocalSearch:localSearch];
-        [localSearch startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
-            [[sender cell] stopSpinner];
-            if (error) {
-                NSLog(@"%@", error);
-            } else {
-                MKPlacemark *placemark = [[[response mapItems] firstObject] placemark];
-                if (placemark) {
-                    CLLocation *location = [CLLocation locationWithCoordinate:placemark.coordinate];
-                    [[self mapView] setRegion:[response boundingRegion]];
-                    [[self mapView] setPinLocation:location];
-                }
-            }
-        }];
+        request = [[MKLocalSearchRequest alloc] initWithCompletion:completion];
+    } else {
+        request = [[MKLocalSearchRequest alloc] initWithNaturalLanguageQuery:searchString];
     }
+    MKLocalSearch *localSearch = [[MKLocalSearch alloc] initWithRequest:request];
+    [self setLocalSearch:localSearch];
+    [localSearch startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
+        [[sender cell] stopSpinner];
+        if (error) {
+            NSLog(@"%@", error);
+        } else {
+            MKPlacemark *placemark = [[[response mapItems] firstObject] placemark];
+            if (placemark) {
+                CLLocation *location = [CLLocation locationWithCoordinate:placemark.coordinate];
+                [[self mapView] setRegion:[response boundingRegion]];
+                [[self mapView] setPinLocation:location];
+            }
+        }
+    }];
 }
 
 
