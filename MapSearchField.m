@@ -144,9 +144,12 @@
 - (void)updateSuggestionsFromControl:(NSControl *)control {
     NSText *fieldEditor = [self.window fieldEditor:NO forObject:control];
     if (fieldEditor) {
-        // Only use the text up to the caret position
         NSRange selection = [fieldEditor selectedRange];
-        NSString *text = [[fieldEditor string] substringToIndex:selection.location];
+        NSString *text = [fieldEditor string];
+        // Only use the text up to the caret position (if there is highlighted selection)
+        if (selection.length > 0) {
+            text = [[fieldEditor string] substringToIndex:selection.location];
+        }
         [self setSearchString:text];
     }
 }
