@@ -63,9 +63,9 @@
         } else {
             if ([self spins]) {
                 [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopRealAnimation) object:nil];
-                NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:_startAnimationDate];
-                timeInterval = fmax(timeInterval - 0.5, 0);
-                [self performSelector:@selector(stopRealAnimation) withObject:nil afterDelay:timeInterval];
+                NSTimeInterval elapsed = [[NSDate date] timeIntervalSinceDate:_startAnimationDate];
+                NSTimeInterval minimum = 0.5f;
+                [self performSelector:@selector(stopRealAnimation) withObject:nil afterDelay:fmax(minimum - elapsed, 0)];
                 _stopRequested = YES;
             }
         }

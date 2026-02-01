@@ -226,7 +226,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     kSuggestionDetailedLabel - A longer string that provides more detail about the suggestion
     kSuggestionImage - [optional] The image to show in the suggestion thumbnail. If this key is not provided, a thumbnail image will be created in a background que.
 */
-- (void)setSuggestions:(NSArray<NSDictionary*>*)suggestions {
+- (void)setSuggestions:(NSArray<Suggestion*>*)suggestions {
     _suggestions = [suggestions copy];
     
     // We only need to update the layout if the window is currently visible.
