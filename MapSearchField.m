@@ -169,9 +169,9 @@
 {
     if (_userTypedString != searchString) {
         if (![_userTypedString isEqualToString:searchString]) {
-            if([searchString length] < [_userTypedString length]) {
-                _skipNextSuggestion = YES; //isDeleting
-            }
+//            if([searchString length] < [_userTypedString length]) {
+//                _skipNextSuggestion = YES; //isDeleting
+//            }
             _userTypedString = [searchString copy];
             [self startAutocompletion];
         }
@@ -181,7 +181,12 @@
 - (void)startAutocompletion
 {
     if ([_userTypedString length]) {
-        [[self searchCompleter] setQueryFragment:_userTypedString];
+        if (![[[self searchCompleter] queryFragment] isEqualToString:_userTypedString]) {
+            [[self searchCompleter] setQueryFragment:_userTypedString];
+            NSLog(@"Searching for: %@", _userTypedString);
+        } else {
+            [self showCompletions];
+        }
     }
 }
 
@@ -224,6 +229,8 @@
     /* If the suggestionController is already in a cancelled state, this call does nothing and is therefore always safe to call.
      */
     [_suggestionsController cancelSuggestions];
+    [self setSearchString:@""];
+    _skipNextSuggestion = NO;
 }
 
 /* As the delegate for the NSTextField, this class is given a chance to respond to the key binding commands interpreted by the input manager when the field editor calls -interpretKeyEvents:. This is where we forward some of the keyboard commands to the suggestion window to facilitate keyboard navigation. Also, this is where we can determine when the user deletes and where we can prevent AppKit's auto completion.
