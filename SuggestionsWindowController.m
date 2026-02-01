@@ -121,22 +121,15 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     NSRect frame = suggestionWindow.frame;
     frame.size.width = parentFrame.size.width;
     
-    // Place the suggestion window just underneath the text field and make it the same width as th text field.
-    NSPoint location = [parentTextField.superview convertPoint:parentFrame.origin toView:nil];
+    // keep track of the parent text field in case we need to commit or abort editing.
+    _parentTextField = parentTextField;
     
-    NSRect convertRect = [parentWindow convertRectToScreen:NSMakeRect(location.x, location.y, 0.0, 0.0)];
-    location = convertRect.origin;
-    //location = [parentWindow convertBaseToScreen:location];
-    location.y -= 2.0f; // nudge the suggestion window down so it doesn't overlapp the parent view
     [suggestionWindow setFrame:frame display:NO];
-    [suggestionWindow setFrameTopLeftPoint:location];
+    [suggestionWindow setFrameTopLeftPoint:[self calculateWindowOrigin]];
     [self layoutSuggestions]; // The height of the window will be adjusted in -layoutSuggestions.
     
     // add the suggestion window as a child window so that it plays nice with Expose
     [parentWindow addChildWindow:suggestionWindow ordered:NSWindowAbove];
-    
-    // keep track of the parent text field in case we need to commit or abort editing.
-    _parentTextField = parentTextField;
     
     // The window must know its accessibility parent, the control must know the window one of its accessibility children
     // Note that views (controls especially) are often ignored, so we want the unignored descendant - usually a cell
@@ -184,6 +177,20 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         // lost key status, cancel the suggestion window
         [strongSelf cancelSuggestions];
     }];
+}
+
+- (NSPoint)calculateWindowOrigin
+{
+    NSWindow *parentWindow = _parentTextField.window;
+    NSRect parentFrame = _parentTextField.frame;
+    // Place the suggestion window just underneath the text field and make it the same width as th text field.
+    NSPoint location = [_parentTextField.superview convertPoint:parentFrame.origin toView:nil];
+    
+    NSRect convertRect = [parentWindow convertRectToScreen:NSMakeRect(location.x, location.y, 0.0, 0.0)];
+    location = convertRect.origin;
+    //location = [parentWindow convertBaseToScreen:location];
+    location.y -= 2.0f; // nudge the suggestion window down so it doesn't overlapp the parent view
+    return location;
 }
 
 /* Order out the suggestion window, disconnect the accessibility logical relationship and dismantle any observers for auto cancel.
