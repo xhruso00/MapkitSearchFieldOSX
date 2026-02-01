@@ -14,6 +14,10 @@ The original code from CustomMenus was used 1:1 in StoreUI.framework on macOS10.
 Another updated versions with tableview can be found at:
 https://github.com/andyvand/classdump-dyld/blob/0e64b667db469d8791e4b95f78bbdf1c107f1184/Full/System/Library/PrivateFrameworks/SocialUI.framework/Versions/A/SocialUI/SOAddRecipientFieldViewController.h
 
+The last version which uses SuggestionWindow (called CompletionWindow) is Safari.framework. 
+
+Anyone curious in the architecture -> download macOS 10.9 and unarchive.
+
 
 ![](https://raw.githubusercontent.com/xhruso00/MapkitSearchFieldOSX/master/screenshot.png)
 
