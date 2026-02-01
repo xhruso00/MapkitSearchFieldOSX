@@ -187,6 +187,8 @@
         } else {
             [self showCompletions];
         }
+    } else {
+        [_suggestionsController cancelSuggestions];
     }
 }
 
