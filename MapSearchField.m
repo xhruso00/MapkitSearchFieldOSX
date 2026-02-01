@@ -3,6 +3,7 @@
 #import "SuggestionsWindowController.h"
 #import "MapSearchFieldCell.h"
 #import "MapDelayedSpinner.h"
+#import "Suggestion.h"
 
 @interface MapSearchField() <MKLocalSearchCompleterDelegate, NSSearchFieldDelegate, NSTextFieldDelegate> {
 @private
@@ -86,12 +87,12 @@
 /* This is the action method for when the user changes the suggestion selection. Note, this action is called continuously as the suggestion selection changes while being tracked and does not denote user committal of the suggestion. For suggestion committal, the text field's action method is used (see above). This method is wired up programatically in the -controlTextDidBeginEditing: method below.
  */
 - (IBAction)updateWithSelectedSuggestion:(id)sender {
-    NSDictionary *entry = [sender selectedSuggestion];
+    Suggestion *entry = [sender selectedSuggestion];
     if (entry) {
-        _suggestedCompletion = [entry objectForKey:kSuggestionCompletion];
+        _suggestedCompletion = [entry completion];
         NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
         if (fieldEditor) {
-            [self updateFieldEditor:fieldEditor withSuggestion:[entry objectForKey:kSuggestionLabel]];
+            [self updateFieldEditor:fieldEditor withSuggestion:[entry title]];
         }
     } else {
         NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
@@ -105,23 +106,21 @@
 
 /* Recursively search through all the image files starting at the _baseURL for image file names that begin with the supplied string. It returns an array of NSDictionaries. Each dictionary contains a label, detailed label and an url with keys that match the binding used by each custom suggestion view defined in suggestionprototype.xib.
  */
-- (NSArray<NSDictionary*>*)suggestionsForText:(NSString*)text {
+- (NSArray<Suggestion*>*)suggestionsForText:(NSString *)text {
     // We don't want to hit the disk every time we need to re-calculate the the suggestion list. So we cache the result from disk. If we really wanted to be fancy, we could listen for changes to the file system at the _baseURL to know when the cache is out of date.
     
     // Search the known image URLs array for matches.
-    NSMutableArray *suggestions = [NSMutableArray arrayWithCapacity:1];
+    NSMutableArray *suggestions = [NSMutableArray arrayWithCapacity:20];
     NSArray<MKLocalSearchCompletion *> *results = [[self searchCompleter] results];
     
     for (MKLocalSearchCompletion *completion in results) {
+        Suggestion *suggestion = [[Suggestion alloc] init];
         NSString *title = [completion title] ? : @"";
         NSString *subtitle = [completion subtitle] ? : @"";
-        NSDictionary *entry = [NSDictionary dictionaryWithObjectsAndKeys:
-                               title, kSuggestionLabel,
-                               subtitle, kSuggestionDetailedLabel,
-                               completion, kSuggestionCompletion,
-                               [NSNull null], kSuggestionImage,
-                               nil];
-        [suggestions addObject:entry];
+        [suggestion setTitle:title];
+        [suggestion setSubtitle:subtitle];
+        [suggestion setCompletion:completion];
+        [suggestions addObject:suggestion];
         
     }
     
@@ -187,7 +186,7 @@
 {
     if ([[self searchAutocompletions] count]) {
         if ([_userTypedString length]) {
-            NSArray<NSDictionary*>*suggestions = [self suggestionsForText:nil]; //BUG; we are losing order, needs NSArray
+            NSArray<Suggestion*>*suggestions = [self suggestionsForText:nil];
             [_suggestionsController setSuggestions:suggestions];
             if (![_suggestionsController.window isVisible]) {
                 [_suggestionsController beginForTextField:self];

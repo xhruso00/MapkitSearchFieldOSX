@@ -219,7 +219,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     kSuggestionDetailedLabel - A longer string that provides more detail about the suggestion
     kSuggestionImage - [optional] The image to show in the suggestion thumbnail. If this key is not provided, a thumbnail image will be created in a background que.
 */
-- (void)setSuggestions:(NSArray*)suggestions {
+- (void)setSuggestions:(NSArray<NSDictionary*>*)suggestions {
     _suggestions = [suggestions copy];
     
     // We only need to update the layout if the window is currently visible.
@@ -306,12 +306,12 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     frame.size.height = 0.0f;
     frame.size.width = NSWidth(contentFrame);
     frame.origin = NSMakePoint(0, contentView.cornerRadius); // offset the Y posistion so that the suggetion view does not try to draw past the rounded corners.
-    for (NSDictionary *entry in _suggestions) {
+    for (Suggestion *entry in _suggestions) {
         frame.origin.y += frame.size.height;
         
         NSViewController *viewController;
         
-        if ([[entry objectForKey:kSuggestionDetailedLabel] isEqualToString:@""]) {
+        if (![entry hasSubtitle]) {
             viewController = [[NSViewController alloc] initWithNibName:@"suggestionprototype1" bundle:nil];
         } else {
             viewController = [[NSViewController alloc] initWithNibName:@"suggestionprototype2" bundle:nil];
@@ -334,8 +334,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         [contentView addTrackingArea:trackingArea];
         
         // convert the suggestion enty to a mutable dictionary. This dictionary is bound to the view controller's representedObject. The represented object is what all the subviews are bound to in IB. We must use a mutable dictionary because we may change one of its key values.
-        NSMutableDictionary *mutableEntry = [entry mutableCopy];
-        [viewController setRepresentedObject:mutableEntry];
+        [viewController setRepresentedObject:entry];
         
         [_viewControllers addObject:viewController];
         [_trackingAreas addObject:trackingArea];
@@ -421,10 +420,3 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     }
 }
 @end
-
-
-NSString *kSuggestionImage = @"image";
-NSString *kSuggestionCompletion = @"completion";
-NSString *kSuggestionLabel = @"label";
-NSString *kSuggestionDetailedLabel = @"detailedLabel";
-

@@ -45,13 +45,8 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
 
 */
 
-#import <Cocoa/Cocoa.h>
-
-APPKIT_EXTERN NSString *kSuggestionCompletion;
-APPKIT_EXTERN NSString *kSuggestionImage;
-APPKIT_EXTERN NSString *kSuggestionLabel;
-APPKIT_EXTERN NSString *kSuggestionDetailedLabel;
-APPKIT_EXTERN NSString *kSuggestionGroup;
+#import <AppKit/Appkit.h>
+#import "Suggestion.h"
 
 @interface SuggestionsWindowController : NSWindowController {
 @private
@@ -86,7 +81,7 @@ APPKIT_EXTERN NSString *kSuggestionGroup;
     kSuggestionDetailedLabel - A longer string that provides more detail about the suggestion
     kSuggestionImage - [optional] The image to show in the suggestion thumbnail. If this key is not provided, a thumbnail image will be created in a background que and added to the dicionary. Hence, the mutable dicionary requirement.
 */
-- (void)setSuggestions:(NSArray*)suggestions;
+- (void)setSuggestions:(NSArray<Suggestion*>*)suggestions;
 
 // Returns the dictionary of the currently selected suggestion.
 - (id)selectedSuggestion;
