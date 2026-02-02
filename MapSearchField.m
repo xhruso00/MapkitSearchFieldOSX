@@ -163,6 +163,7 @@
         _suggestionsController.target = self;
         _suggestionsController.action = @selector(updateWithSelectedSuggestion:);
     }
+    [(NSTextView *)[notification userInfo][@"NSFieldEditor"] setAutomaticTextReplacementEnabled:NO];
 }
 
 - (void)setSearchString:(NSString *)searchString
