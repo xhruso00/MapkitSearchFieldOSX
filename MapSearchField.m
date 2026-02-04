@@ -97,7 +97,8 @@
     } else {
         NSText *fieldEditor = [self.window fieldEditor:NO forObject:self];
         if (fieldEditor) {
-            [self updateFieldEditor:fieldEditor withSuggestion:_userTypedString];
+            [fieldEditor setString:_userTypedString];
+            [fieldEditor setSelectedRange:NSMakeRange(_userTypedString.length, 0)];
         }
         _suggestedCompletion = nil;
     }
@@ -129,14 +130,10 @@
 
 /* Update the field editor with a suggested string. The additional suggested characters are auto selected.
  */
-- (void)updateFieldEditor:(NSText *)fieldEditor withSuggestion:(NSString *)suggestion {
-//    if (suggestion == nil){
-//        [fieldEditor delete:self];
-//    } else {
-        NSRange selection = NSMakeRange([fieldEditor selectedRange].location, [suggestion length]);
-        [fieldEditor setString:suggestion];
-        [fieldEditor setSelectedRange:selection];
-//    }
+- (void)updateFieldEditor:(NSText *)fieldEditor withSuggestion:(nonnull NSString *)suggestion {
+    NSRange selection = NSMakeRange(0, [suggestion length]);
+    [fieldEditor setString:suggestion];
+    [fieldEditor setSelectedRange:selection];
 }
 
 /* Determines the current list of suggestions, display the suggestions and update the field editor.
