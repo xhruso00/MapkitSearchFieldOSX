@@ -55,6 +55,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
     NSArray *_suggestions;
     NSMutableArray *_viewControllers;
     NSMutableArray *_trackingAreas;
+    NSView *_lastMouseEnteredView;
     BOOL _needsLayoutUpdate;
     
     id _localMouseDownEventMonitor;

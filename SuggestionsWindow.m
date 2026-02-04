@@ -68,6 +68,7 @@ Copyright (C) 2012 Apple Inc. All Rights Reserved.
         [self setHasShadow:YES];
         [self setBackgroundColor:[NSColor clearColor]];
         [self setOpaque:NO];
+        [self setAcceptsMouseMovedEvents:YES];
     }
     return self;
 }

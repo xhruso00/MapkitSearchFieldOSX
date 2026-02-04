@@ -93,7 +93,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* Custom selectedView property setter so that we can set the highlighted property of the old and new selected views.
-*/
+ */
 - (void)setSelectedView:(NSView *)view {
     if (_selectedView != view) {
         ((HighlightingView*)_selectedView).highlighted = NO;
@@ -104,7 +104,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* Set selected view and send action
-*/
+ */
 - (void)userSetSelectedView:(NSView *)view {
     if (self.selectedView != view) {
         self.selectedView = view;
@@ -112,8 +112,8 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     }
 }
 
-/* Position and lay out the suggestions window, set up auto cancelling tracking, and wires up the logical relationship for accessibility. 
-*/
+/* Position and lay out the suggestions window, set up auto cancelling tracking, and wires up the logical relationship for accessibility.
+ */
 - (void)beginForTextField:(NSTextField *)parentTextField {
     NSWindow *suggestionWindow = self.window;
     NSWindow *parentWindow = parentTextField.window;
@@ -149,9 +149,9 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         if ([event window] != suggestionWindow) {
             if ([event window] == parentWindow) {
                 /* Clicks in the parent window should either be in the parent text field or dismiss the suggestions window. We want clicks to occur in the parent text field so that the user can move the caret or select the search text.
-                
-                    Use hit testing to determine if the click is in the parent text field. Note: when editing an NSTextField, there is a field editor that covers the text field that is performing the actual editing. Therefore, we need to check for the field editor when doing hit testing.
-                */
+                 
+                 Use hit testing to determine if the click is in the parent text field. Note: when editing an NSTextField, there is a field editor that covers the text field that is performing the actual editing. Therefore, we need to check for the field editor when doing hit testing.
+                 */
                 NSView *contentView = [parentWindow contentView];
                 NSPoint locationTest = [contentView convertPoint:[event locationInWindow] fromView:nil];
                 NSView *hitView = [contentView hitTest:locationTest];
@@ -165,7 +165,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
                 // Not in the suggestion window, and not in the parent window. This must be another window or palette for this application.
                 [strongSelf cancelSuggestions];
             }
-        } 
+        }
         
         return event;
     }];
@@ -194,8 +194,8 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* Order out the suggestion window, disconnect the accessibility logical relationship and dismantle any observers for auto cancel.
-    Note: It is safe to call this method even if the suggestions window is not currently visible.
-*/
+ Note: It is safe to call this method even if the suggestions window is not currently visible.
+ */
 - (void)cancelSuggestions {
     NSWindow *suggestionWindow = self.window;
     if ([suggestionWindow isVisible]) {
@@ -221,11 +221,11 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* Update the array of suggestions. The array should consist of NSDictionaries each containing the following keys:
-    kSuggestionCompletion - The URL to an image file
-    kSuggestionLabel - The main suggestion string
-    kSuggestionDetailedLabel - A longer string that provides more detail about the suggestion
-    kSuggestionImage - [optional] The image to show in the suggestion thumbnail. If this key is not provided, a thumbnail image will be created in a background que.
-*/
+ kSuggestionCompletion - The URL to an image file
+ kSuggestionLabel - The main suggestion string
+ kSuggestionDetailedLabel - A longer string that provides more detail about the suggestion
+ kSuggestionImage - [optional] The image to show in the suggestion thumbnail. If this key is not provided, a thumbnail image will be created in a background que.
+ */
 - (void)setSuggestions:(NSArray<Suggestion*>*)suggestions {
     _suggestions = [suggestions copy];
     
@@ -236,7 +236,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* Returns the dictionary of the currently selected suggestion.
-*/
+ */
 - (id)selectedSuggestion {
     id suggestion = nil;
     
@@ -264,17 +264,17 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 #pragma mark Mouse Tracking
 
 /* Mouse tracking is easily accomplished via tracking areas. We setup a tracking area for suggestion view and watch as the mouse moves in and out of those tracking areas.
-*/
+ */
 
 /* Properly creates a tracking area for an image view.
-*/
+ */
 - (id)trackingAreaForView:(NSView *)view {
     // make tracking data (to be stored in NSTrackingArea's userInfo) so we can later determine the imageView without hit testing
     NSDictionary *trackerData = [NSDictionary dictionaryWithObjectsAndKeys:view, kTrackerKey, nil];
     
     NSRect trackingRect = [[self.window contentView] convertRect:view.bounds fromView:view];
     NSTrackingAreaOptions trackingOptions = NSTrackingEnabledDuringMouseDrag | NSTrackingMouseEnteredAndExited | NSTrackingActiveInActiveApp;
-	NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:trackingRect options:trackingOptions owner:self userInfo:trackerData];
+    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:trackingRect options:trackingOptions owner:self userInfo:trackerData];
     
     return trackingArea;
 }
@@ -283,7 +283,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 - (void)layoutSuggestions {
     NSWindow *window = self.window;
     RoundedCornersView *contentView = (RoundedCornersView*)[window contentView];
-
+    
     // Remove any existing suggestion view and associated tracking area and set the selection to nil
     self.selectedView = nil;
     
@@ -302,12 +302,12 @@ APPKIT_EXTERN NSString *kSuggestionImage;
         _viewControllers = [[NSMutableArray alloc] initWithCapacity:1];
         _trackingAreas = [[NSMutableArray alloc] initWithCapacity:1];
     }
-
+    
     /* Iterate througn each suggestion creating a view for each entry.
-    */
+     */
     
     /* The width of each suggestion view should match the width of the window. The height is determined by the view's height set in IB.
-    */
+     */
     NSRect contentFrame = contentView.frame;
     NSRect frame;
     frame.size.height = 0.0f;
@@ -348,7 +348,7 @@ APPKIT_EXTERN NSString *kSuggestionImage;
     }
     
     /* We have added all of the suggestion to the window. Now set the size of the window.
-    */
+     */
     
     // Don't forget to account for the extra room needed the rounded corners.
     contentFrame.size.height = NSMaxY(frame) + contentView.cornerRadius;
@@ -360,15 +360,21 @@ APPKIT_EXTERN NSString *kSuggestionImage;
 }
 
 /* The mouse is now over one of our child image views. Update selection and send action.
-*/
+ */
 - (void)mouseEntered:(NSEvent*)event {
-	HighlightingView *view = [(NSDictionary*)[event userData] objectForKey: kTrackerKey];
-    [self userSetSelectedView:view];
+    _lastMouseEnteredView = [(NSDictionary*)[event userData] objectForKey: kTrackerKey];
+}
+
+- (void)mouseMoved:(NSEvent*)event {
+    if (_lastMouseEnteredView) {
+        [self userSetSelectedView:_lastMouseEnteredView];
+    }
 }
 
 /* The mouse has left one of our child image views. Set the selection to no selection and send action
 */
 - (void)mouseExited:(NSEvent*)event {
+    _lastMouseEnteredView = nil;
     /// after clicking on a row, window is dismissed but the event is still fired
     if (![[self window] isVisible]) {
         return;
