@@ -4,15 +4,15 @@
 #import "MapSearchFieldCell.h"
 #import "MapDelayedSpinner.h"
 #import "Suggestion.h"
+#import "LocationSuggestionsService.h"
 
-@interface MapSearchField() <MKLocalSearchCompleterDelegate, NSSearchFieldDelegate, NSTextFieldDelegate> {
+@interface MapSearchField() <NSSearchFieldDelegate, NSTextFieldDelegate> {
 @private
     SuggestionsWindowController *_suggestionsController;
     NSString *_userTypedString;
 }
-@property (strong) MKLocalSearchCompleter *searchCompleter;
+@property (strong) LocationSuggestionsService *suggestionsService;
 @property (strong) MKLocalSearch *localSearch;
-@property (nonatomic, strong) NSArray <MKLocalSearchCompletion*>*searchAutocompletions;
 @property BOOL skipNextSuggestion;
 
 @end
@@ -57,10 +57,8 @@
 - (void)commonInit
 {
     _userTypedString = @"";
-    MKLocalSearchCompleter *searchCompleter = [[MKLocalSearchCompleter alloc] init];
-    searchCompleter.resultTypes = MKLocalSearchCompleterResultTypeAddress|MKLocalSearchCompleterResultTypePointOfInterest;
-    searchCompleter.delegate = self;
-    [self setSearchCompleter:searchCompleter];
+    [self setSuggestionsService:[LocationSuggestionsService shared]];
+    _suggestionsService = [LocationSuggestionsService shared];
     [self setDelegate:self];
 }
 
@@ -112,7 +110,7 @@
     
     // Search the known image URLs array for matches.
     NSMutableArray *suggestions = [NSMutableArray arrayWithCapacity:20];
-    NSArray<MKLocalSearchCompletion *> *results = [[self searchCompleter] results];
+    NSArray<MKLocalSearchCompletion *> *results = [[self suggestionsService] currentSuggestions];
     
     for (MKLocalSearchCompletion *completion in results) {
         Suggestion *suggestion = [[Suggestion alloc] init];
@@ -171,20 +169,24 @@
 //                _skipNextSuggestion = YES; //isDeleting
 //            }
             _userTypedString = [searchString copy];
-            [self startAutocompletion];
+            [self startSuggestionsSearch];
         }
     }
 }
 
-- (void)startAutocompletion
+- (void)startSuggestionsSearch
 {
     if ([_userTypedString length]) {
-        if (![[[self searchCompleter] queryFragment] isEqualToString:_userTypedString]) {
-            [[self searchCompleter] setQueryFragment:_userTypedString];
-            NSLog(@"Searching for: %@", _userTypedString);
-        } else {
-            [self showCompletions];
-        }
+        __weak typeof(self) weakSelf = self;
+        [[self suggestionsService] searchString:_userTypedString completion:^(NSArray<MKLocalSearchCompletion *> * _Nullable results, NSError * _Nullable error) {
+            __strong typeof(self) strongSelf = weakSelf;
+            if (error) {
+                [strongSelf->_suggestionsController cancelSuggestions];
+            }
+            if (results) {
+                [strongSelf showCompletions];
+            }
+        }];
     } else {
         [_suggestionsController cancelSuggestions];
     }
@@ -192,7 +194,7 @@
 
 - (void)showCompletions
 {
-    if ([[self searchAutocompletions] count]) {
+    if ([[[self suggestionsService] currentSuggestions] count]) {
         if ([_userTypedString length]) {
             NSArray<Suggestion*>*suggestions = [self suggestionsForText:nil];
             [_suggestionsController setSuggestions:suggestions];
@@ -270,9 +272,8 @@
     if (commandSelector == @selector(cancelOperation:)) {
         if ([_suggestionsController.window isVisible]) {
             [_suggestionsController cancelSuggestions];
-            [[self searchCompleter] cancel];
+            [[self suggestionsService] cancelSearch];
             [self updateWithSelectedSuggestion:nil];
-            _searchAutocompletions = nil;
             return YES;
         } else {
             _userTypedString = @"";
@@ -287,29 +288,6 @@
 - (void)cancelOperation:(nullable id)sender
 {
     [[self window] makeFirstResponder:[self window]];
-}
-
-#pragma mark -
-#pragma mark MKLocalSearchCompleterDelegate
-
-- (void)completerDidUpdateResults:(MKLocalSearchCompleter *)completer
-{
-    _suggestedCompletion = nil;
-    NSArray<MKLocalSearchCompletion*>*completions = [completer results];
-    [self setSearchAutocompletions:completions];
-    if ([completions count]) {
-        [self showCompletions];
-    } else {
-        [_suggestionsController cancelSuggestions];
-        [self updateWithSelectedSuggestion:nil];
-    }
-}
-
-- (void)completer:(MKLocalSearchCompleter *)completer didFailWithError:(NSError *)error
-{
-    NSLog(@"%@",error);
-    _suggestedCompletion = nil;
-    [_suggestionsController cancelSuggestions];
 }
 
 @end
